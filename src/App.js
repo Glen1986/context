@@ -1,4 +1,4 @@
-import { Component, createContext } from 'react'
+import { Component, createContext, useContext } from 'react'
 
 const Context1 = createContext('mi-valor')
 const Context2 = createContext('mi-valor2')
@@ -26,10 +26,16 @@ class Componente extends Component {
     }
 }
 
+const Componente2 = () => {
+    const valor1 = useContext(Context1)
+    const valor2 = useContext(Context2)
+    return <div>{`${valor1} ${valor2}`}</div>
+}
 const App = () => {
     return (
         <Provider>
             <Componente />
+            <Componente2 />
         </Provider>
     )
 }

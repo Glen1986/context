@@ -1,12 +1,12 @@
-import { createContext, useContext, useState, memo } from 'react'
+import { createContext, useContext, useState, memo, useCallback } from 'react'
 
 const Context = createContext()
 
 const ContadorProvider = ({ children }) => {
     const [contador, setCont] = useState(0)
 
-    const inc = () => setCont(contador + 1)
-    const dec = () => setCont(contador - 1)
+    const inc = useCallback(() => setCont((contador) => contador + 1), [])
+    const dec = useCallback(() => setCont((contador) => contador - 1), [])
     return (
         <Context.Provider value={{ contador, inc, dec }}>
             {children}

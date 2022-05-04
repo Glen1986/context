@@ -1,28 +1,41 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, memo } from 'react'
 
-const Context = createContext({ valor: false, toggle: () => {} })
-const Provider = ({ children }) => {
-    const [valor, setValor] = useState(false)
-    const value = {
-        valor,
-        toggle: () => setValor(!valor),
-    }
-    return <Context.Provider value={value}>{children}</Context.Provider>
-}
-const Componente = () => {
-    const { valor, toggle } = useContext(Context)
+const Context = createContext()
+
+const ContadorProvider = ({ children }) => {
+    const [contador, setCont] = useState(0)
+
+    const inc = () => setCont(contador + 1)
+    const dec = () => setCont(contador - 1)
     return (
-        <div>
-            <label>{valor.toString()}</label>
-            <button onClick={toggle}>toggle</button>
-        </div>
+        <Context.Provider value={{ contador, inc, dec }}>
+            {children}
+        </Context.Provider>
     )
 }
+const Inc = memo(() => {
+    console.log('increm')
+    const { inc } = useContext(Context)
+    return <button onClick={inc}>inc</button>
+})
+const Dec = memo(() => {
+    console.log('decrem')
+    const { dec } = useContext(Context)
+    return <button onClick={dec}>dec</button>
+})
+const Label = () => {
+    console.log('label')
+    const { contador } = useContext(Context)
+    return <h1>{contador}</h1>
+}
+
 const App = () => {
     return (
-        <Provider>
-            <Componente />
-        </Provider>
+        <ContadorProvider>
+            <Label />
+            <Inc />
+            <Dec />
+        </ContadorProvider>
     )
 }
 export default App

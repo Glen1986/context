@@ -18,6 +18,7 @@ const App = () => {
     return (
         <Provider>
             <Componente />
+            <Context.Consumer>{(valor) => <div>{valor}</div>}</Context.Consumer>
         </Provider>
     )
 }

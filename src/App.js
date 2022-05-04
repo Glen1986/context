@@ -1,41 +1,22 @@
-import { createContext, useContext, useState, memo, useCallback } from 'react'
+import { Component, createContext, useContext } from 'react'
 
-const Context = createContext()
+const Context = createContext('mi-valor')
 
-const ContadorProvider = ({ children }) => {
-    const [contador, setCont] = useState(0)
-
-    const inc = useCallback(() => setCont((contador) => contador + 1), [])
-    const dec = useCallback(() => setCont((contador) => contador - 1), [])
-    return (
-        <Context.Provider value={{ contador, inc, dec }}>
-            {children}
-        </Context.Provider>
-    )
+const Provider = ({ children }) => {
+    return <Context.Provider value="otro-valor">{children}</Context.Provider>
 }
-const Inc = memo(() => {
-    console.log('increm')
-    const { inc } = useContext(Context)
-    return <button onClick={inc}>inc</button>
-})
-const Dec = memo(() => {
-    console.log('decrem')
-    const { dec } = useContext(Context)
-    return <button onClick={dec}>dec</button>
-})
-const Label = () => {
-    console.log('label')
-    const { contador } = useContext(Context)
-    return <h1>{contador}</h1>
+class Componente extends Component {
+    static contextType = Context
+    render() {
+        console.log(this.context)
+        return <div>weed</div>
+    }
 }
-
 const App = () => {
     return (
-        <ContadorProvider>
-            <Label />
-            <Inc />
-            <Dec />
-        </ContadorProvider>
+        <Provider>
+            <Componente />
+        </Provider>
     )
 }
 export default App
